@@ -1,6 +1,8 @@
-{% paginate collection.products by 2 %}
+{% assign collection = collections['all'] %}
 <h1>{{ collection.title }}</h1>
+
 {% for product in collection.products %}
+
 <div>
   <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
   {{ product.price | money }}
@@ -14,6 +16,6 @@
 </div>
 {% else %}
 <p>no matches</p>
-{% endfor %} {% if paginate.pages > 1 %}
-{{ paginate | default_pagination }}
-{% endif %} {% endpaginate %}
+{% endfor %}{% schema %} { "name": "Test Collection", "settings": [ { "type":
+"collection", "id": "collection", "label": "Collection" } ] } {% endschema %} {%
+stylesheet %} {% endstylesheet %} {% javascript %} {% endjavascript %}

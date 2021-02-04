@@ -1,0 +1,8 @@
+<footer>
+  <p id="random_title">{{ settings.random_title }}</p>
+</footer>
+
+{% schema %} { "name": "Footer", "settings": [] } {% endschema %} {% stylesheet
+%} {% endstylesheet %} {% javascript %} var randomTitle =
+document.getElementById("random_title"); console.log(randomTitle.innerHTML); {%
+endjavascript %}
