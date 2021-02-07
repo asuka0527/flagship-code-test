@@ -1,29 +1,144 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
-{% assign featured_image = current_variant.featured_image | default: product.featured_image %}
-<img src="{{ featured_image | img_url: 'large' }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg">
+{%
+assign featured_image = current_variant.featured_image | default:
+product.featured_image %}
+
+{% assign cart_index = product.quantity %}
+{{cart_index}}
+
+<img src="{{ featured_image | img_url: 'large' }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg"/>
 {% for image in product.images %}
-  <a href="{{ image.src | img_url: 'large' }}">
-    <img src="{{ image.src | img_url: 'compact' }}" alt="{{ image.alt | escape }}">
-  </a>
+    <a href="{{ image.src | img_url: 'large' }}">
+        <img src="{{ image.src | img_url: 'compact' }}" alt="{{ image.alt | escape }}"/>
+    </a>
 {% endfor %}
 <h1>{{ product.title }}</h1>
-<form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
-  <select name="id" id="productSelect">
-    {% for variant in product.variants %}
-      {% if variant.available %}
-        <option value="{{ variant.id }}">
-          {{ variant.title }} - {{ variant.price | money_with_currency }}
-        </option>
-      {% else %}
-        <option disabled="disabled">
-          {{ variant.title }} - sold out
-        </option>
-      {% endif %}
-    {% endfor %}
-  </select>
-  {{ current_variant.price | money }}
-  <label for="Quantity">quantity</label>
-  <input type="number" id="Quantity" name="quantity" value="1" min="1">
-  <button type="submit" name="add" id="AddToCart">Add to cart</button>
+
+
+<form action="/cart/add" class="shopify-product-form" enctype="multipart/form-data" id="add-to-cart" method="post">
+    <select id="productSelect" name="id">
+        {% for variant in product.variants %}
+            {% if variant.available %}
+                <option value="{{ variant.id }}" id="variant_id">
+                    {{ variant.title }}
+                    -
+                    {{ variant.price | money_with_currency }}
+                </option>
+            {% else %}
+                <option disabled="disabled">{{ variant.title }}
+                    - sold out</option>
+            {% endif %}
+        {% endfor %}
+    </select>
+
+    <label for="Quantity">quantity</label>
+    <input id="Quantity" min="1" name="quantity" type="number" value="1"/>
+
+
+    {% if current_variant.inventory_management == "shopify" and
+  current_variant.inventory_policy != "continue" %}
+        {%if current_variant.inventory_quantity > 5 %}
+            <button class="add" id="add" name="add" onclick="addItem('add-to-cart'); return false; " type="submit" value="Add to cart">
+                Add to cart
+                
+            </button>
+        {%elsif  current_variant.inventory_quantity < 1%}
+            <button disabled id="out-of-stock" name="add" type="button">
+                Add to cart
+            </button>
+
+        {% else %}
+            <button class="add" id="add" name="add" onclick="addItem()" type="button" value="Low stock">
+                Low stock
+            </button>
+        {% endif %}
+    {% endif %}
+
+    <label for="cart_index">Cart count :
+    </label>
+    <input id="cart_index" type="hidden" name="properties[cart_index]" value={{cart.item_count}}>{{cart.item_count}}
+
+    <label for="engraving">Engraving</label>
+    <input id="engraving" name="properties[Engraving]" type="text">
+
+
+    <input class="add" id="cart_index" name="properties[cart_index]" onclick="addItem()" type="button" value="Add to cart">
+
+
+    {%assign cartItem  =  {{cart.item_count}}%}
+
 </form>
 <div>{{ product.description }}</div>
+There are
+<span class="cart-item-count"></span>
+item(s) in your cart.
+
+<script>
+
+
+console.log("connected");
+
+let variant_id = document.getElementById("variant_id").value;
+console.log(variant_id);
+
+let quantity = document.getElementById("Quantity").value;
+
+var cartItemCounter = document.querySelector("span.cart-item-count");
+
+jQuery.ajax({url: "/cart.js", dataType: "json"}).done(function (data) {
+    console.log(data.items.properties);
+
+    var newCount = data.item_count;
+    cartItemCounter.innerText = newCount;
+
+    var number = data.item_count
+    console.log(data);
+    return cart_index
+});
+
+
+
+let formData = {
+    "items": [
+        {
+            "id": variant_id,
+            "quantity": quantity,
+            "properties": {
+                "cart_index" : 1
+            }
+            
+        }
+    ]
+};
+
+function addItem() {
+    fetch('/cart/add.js', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+    }).then(response => {
+        return response.json();
+    }).catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+
+
+
+</script>
+
+<style>
+.add {
+    background: #63aa63;
+    color: #fff;
+
+
+}
+.add:hover {
+    background: #0000ff !important;
+}
+
+</style>
