@@ -3,8 +3,6 @@
 assign featured_image = current_variant.featured_image | default:
 product.featured_image %}
 
-{% assign cart_index = product.quantity %}
-{{cart_index}}
 
 <img src="{{ featured_image | img_url: 'large' }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg"/>
 {% for image in product.images %}
@@ -34,69 +32,35 @@ product.featured_image %}
     <label for="Quantity">quantity</label>
     <input id="Quantity" min="1" name="quantity" type="number" value="1"/>
 
+    <input id="cart_index-count" name="properties[_cart_index]" type="hidden" value=" {{cart.item_count}} ">
 
     {% if current_variant.inventory_management == "shopify" and
   current_variant.inventory_policy != "continue" %}
         {%if current_variant.inventory_quantity > 5 %}
-            <button class="add" id="add" name="add" onclick="addItem('add-to-cart'); return false; " type="submit" value="Add to cart">
+            <button class="add" id="add" onclick="addItem('add-to-cart') " type="button">
                 Add to cart
-                
             </button>
         {%elsif  current_variant.inventory_quantity < 1%}
-            <button disabled id="out-of-stock" name="add" type="button">
+            <button disabled id="out-of-stock" name="out-of-stock" type="button">
                 Add to cart
             </button>
-
         {% else %}
-            <button class="add" id="add" name="add" onclick="addItem()" type="button" value="Low stock">
+            <button class="add" id="add" name="add" onclick="addItem()" type="button">
                 Low stock
             </button>
         {% endif %}
     {% endif %}
 
-    <label for="cart_index">Cart count :
-    </label>
-    <input id="cart_index" type="hidden" name="properties[cart_index]" value={{cart.item_count}}>{{cart.item_count}}
-
-    <label for="engraving">Engraving</label>
-    <input id="engraving" name="properties[Engraving]" type="text">
-
-
-    <input class="add" id="cart_index" name="properties[cart_index]" onclick="addItem()" type="button" value="Add to cart">
-
-
-    {%assign cartItem  =  {{cart.item_count}}%}
 
 </form>
-<div>{{ product.description }}</div>
-There are
-<span class="cart-item-count"></span>
-item(s) in your cart.
+
 
 <script>
-
-
-console.log("connected");
-
 let variant_id = document.getElementById("variant_id").value;
-console.log(variant_id);
-
 let quantity = document.getElementById("Quantity").value;
+let cart_indexCount = document.getElementById("cart_index-count").value
 
-var cartItemCounter = document.querySelector("span.cart-item-count");
-
-jQuery.ajax({url: "/cart.js", dataType: "json"}).done(function (data) {
-    console.log(data.items.properties);
-
-    var newCount = data.item_count;
-    cartItemCounter.innerText = newCount;
-
-    var number = data.item_count
-    console.log(data);
-    return cart_index
-});
-
-
+let currentcount = Number(cart_indexCount) + 1 ;
 
 let formData = {
     "items": [
@@ -104,9 +68,8 @@ let formData = {
             "id": variant_id,
             "quantity": quantity,
             "properties": {
-                "cart_index" : 1
+                "_cart_index": currentcount
             }
-            
         }
     ]
 };

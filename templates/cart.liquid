@@ -1,6 +1,3 @@
-{% assign has_y = 0 %}
-
-
 {% if cart.item_count > 0 %}
     <h1>cart</h1>
     <form action="/cart" method="post" novalidate>
@@ -14,14 +11,7 @@
             <tbody>
                 {% for item in cart.items %}
                     <tr>
-
                         <td>
-
-
-                            {% assign has_y = has_y | plus: 1 %}
-                            <span value={{ has_y }}>{{ has_y }}</span>
-
-                            <span id="cartIndex" value={{forloop.index}}>{{forloop.index}}</span>
                             <a href="{{ item.url | within: collections.all }}">
                                 <img src="{{ item | img_url: 'medium' }}" alt="{{ item.title | escape }}">
                             </a>
@@ -60,10 +50,3 @@
     <h2>cart</h2>
     Cart is empty
 {% endif %}
-
-
-<script>
-
-    
-    </script>
-    
