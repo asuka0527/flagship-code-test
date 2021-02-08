@@ -27,8 +27,6 @@ product.featured_image %}
             {% endif %}
         {% endfor %}
     </select>
-
-
     <label for="Quantity">quantity</label>
     <input id="Quantity" min="1" name="quantity" type="number" value="1"/>
 
@@ -51,12 +49,71 @@ product.featured_image %}
         {% endif %}
     {% endif %}
     <div>{{ product.description }}</div>
-    {% section "footer" %}
-    <h4 id="random_title">{{ settings.random_title }}</h4>
-
 </form>
 
+{% section "footer" %}
+<h4 id="random_title">{{ settings.random_title }}</h4>
+
+<div class="modal hidden">
+    <button class="btn-close-modal" id="target">
+        &times;
+    </button>
+    <h2 class="product-single__title">
+        {{ product.title }}
+    </h2>
+    {% assign current_variant = product.selected_or_first_available_variant %}
+
+    <p>
+        current stock :
+        <span class="variant-sku">{{ current_variant.sku }}</span>
+    </p>
+
+    <h3>Current items in cart:</h3>
+
+    <ul>
+        {% for item in cart.items %}
+            <li>{{ item.title }}
+                : quantity :
+                {{ item.quantity }}</li>
+
+        {% endfor %}
+    </ul>
+
+    <h4>
+        Total :
+        {{ cart.item_count }}
+        {{ cart.item_count | pluralize: 'Item', 'Items' }}
+        (
+        {{ cart.total_price | money }}
+        )
+    </h4>
+</div>
+<div class="overlay hidden"></div>
+
 <script>
+
+     // c-feature
+    const modal = document.querySelector(".modal");
+    const overlay = document.querySelector(".overlay");
+    const btnCloseModal = document.querySelector(".btn-close-modal");
+
+    btnCloseModal.addEventListener("click", function () {
+        modal.classList.add("hidden");
+        overlay.classList.add("hidden");
+    });
+
+    window.addEventListener("load", function () {
+        modal.classList.remove("hidden");
+        overlay.classList.remove("hidden");
+    });
+
+ 
+    // b-feature
+    let randomTitle = document.getElementById("random_title").innerHTML
+    console.log(randomTitle);
+
+
+
      // a-feature
     let variant_id = document.getElementById("variant_id").value;
     let quantity = document.getElementById("Quantity").value;
@@ -87,13 +144,6 @@ product.featured_image %}
         });
     }
 
-    // b-feature
-    let randomTitle = document
-        .getElementById("random_title")
-        .innerHTML
-
-        console
-        .log(randomTitle);
 
 </script>
 

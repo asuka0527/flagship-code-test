@@ -11,7 +11,9 @@
       content_for_header
     }}
         <!-- Header hook for plugins -->
-        {{ 'style.css' | asset_url | stylesheet_tag }}
+        {{
+    "c-feature.css.scss" | asset_url | stylesheet_tag
+    }}
         {{
       "application.js" | asset_url | script_tag
     }}
@@ -49,6 +51,7 @@
         </main>
 
         {% section 'footer' %}
+
 
     </body>
 </html>
