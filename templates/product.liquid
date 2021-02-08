@@ -35,10 +35,10 @@ product.featured_image %}
 </div>
 
 <div class="modal hidden">
-    <button class="btn-close-modal" id="target" onclick="closeModal()">
+    <button class="btn-close-modal" id="target">
         &times;
     </button>
-    <h2 class="product-single__title" itemprop="name">
+    <h2 class="product-single__title">
         {{ product.title }}
     </h2>
     {% assign current_variant = product.selected_or_first_available_variant %}
