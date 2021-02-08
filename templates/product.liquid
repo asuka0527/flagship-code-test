@@ -54,54 +54,56 @@ product.featured_image %}
 
 </form>
 
+{% unless product == empty %}
+    <script id="ProductJson-{{ section.id }}" type="application/json">
+        {{ product | json }}
+    </script>
+    <script id="ModelJson-{{ section.id }}" type="application/json">
+        {{ product.media | where: 'media_type', 'model' | json }}
+    </script>
+{% endunless %}
 
 <script>
-let variant_id = document.getElementById("variant_id").value;
-let quantity = document.getElementById("Quantity").value;
-let cart_indexCount = document.getElementById("cart_index-count").value
+    let variant_id = document.getElementById("variant_id").value;
+    let quantity = document.getElementById("Quantity").value;
+    let cart_indexCount = document.getElementById("cart_index-count").value
 
-let currentcount = Number(cart_indexCount) + 1 ;
+    let currentcount = Number(cart_indexCount) + 1;
 
-let formData = {
-    "items": [
-        {
-            "id": variant_id,
-            "quantity": quantity,
-            "properties": {
-                "_cart_index": currentcount
-            }
-        }
-    ]
-};
-
-function addItem() {
-    fetch('/cart/add.js', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-    }).then(response => {
-        return response.json();
-    }).catch((error) => {
-        console.error('Error:', error);
-    });
-}
-
-
+   
+    function addItem() {
+        fetch('/cart/add.js', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    "id": variant_id,
+                    "quantity": quantity,
+                    "properties": {
+                        "_cart_index": currentcount
+                    }
+                }
+            )
+        }).then(response => {
+            return response.json();
+        }).catch((error) => {
+            console.error('Error:', error);
+        });
+    }
 
 
 </script>
 
 <style>
-.add {
-    background: #63aa63;
-    color: #fff;
+    .add {
+        background: #63aa63;
+        color: #fff;
 
 
-}
-.add:hover {
-    background: #0000ff !important;
-}
-
+    }
+    .add:hover {
+        background: #0000ff !important;
+    }
 </style>
