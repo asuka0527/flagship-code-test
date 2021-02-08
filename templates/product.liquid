@@ -12,7 +12,6 @@ product.featured_image %}
 {% endfor %}
 <h1>{{ product.title }}</h1>
 
-
 <form action="/cart/add" class="shopify-product-form" enctype="multipart/form-data" id="add-to-cart" method="post">
     <select id="productSelect" name="id">
         {% for variant in product.variants %}
@@ -28,6 +27,7 @@ product.featured_image %}
             {% endif %}
         {% endfor %}
     </select>
+
 
     <label for="Quantity">quantity</label>
     <input id="Quantity" min="1" name="quantity" type="number" value="1"/>
@@ -51,10 +51,13 @@ product.featured_image %}
         {% endif %}
     {% endif %}
     <div>{{ product.description }}</div>
+    {% section "footer" %}
+    <h4 id="random_title">{{ settings.random_title }}</h4>
 
 </form>
 
 <script>
+     // a-feature
     let variant_id = document.getElementById("variant_id").value;
     let quantity = document.getElementById("Quantity").value;
     let cart_indexCount = document.getElementById("cart_index-count").value
@@ -84,10 +87,18 @@ product.featured_image %}
         });
     }
 
+    // b-feature
+    let randomTitle = document
+        .getElementById("random_title")
+        .innerHTML
+
+        console
+        .log(randomTitle);
 
 </script>
 
 <style>
+    /* a-feature */
     .add {
         background: #63aa63;
         color: #fff;
