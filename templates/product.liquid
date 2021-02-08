@@ -35,7 +35,7 @@ product.featured_image %}
 </div>
 
 <div class="modal hidden">
-    <button class="btn--close-modal" id="target" onclick="closeModal()">
+    <button class="btn-close-modal" id="target" onclick="closeModal()">
         &times;
     </button>
     <h2 class="product-single__title" itemprop="name">
@@ -69,3 +69,20 @@ product.featured_image %}
     </h4>
 </div>
 <div class="overlay hidden"></div>
+
+<script>
+
+    const modal = document.querySelector(".modal");
+    const overlay = document.querySelector(".overlay");
+    const btnCloseModal = document.querySelector(".btn-close-modal");
+
+    btnCloseModal.addEventListener("click", function () {
+        modal.classList.add("hidden");
+        overlay.classList.add("hidden");
+    });
+
+    window.addEventListener("load", function () {
+        modal.classList.remove("hidden");
+        overlay.classList.remove("hidden");
+    });
+</script>

@@ -13,14 +13,9 @@
         <!-- Header hook for plugins -->
 
         {{
-      "//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" | script_tag
-    }}
-        {{
       "c-feature.css.scss" | asset_url | stylesheet_tag
     }}
-        {{
-      "c-feature.js" | asset_url | script_tag
-    }}
+
     </head>
     <body>
         {% for link in linklists.main-menu.links %}
